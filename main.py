@@ -144,7 +144,7 @@ class  SNKRS():
         path = os.path.dirname(os.path.abspath(__file__))
         gecko_path = str(path) + "/geckodriver.exe"
         if use_proxies == 'Y':
-            self.drive = webdriver.Firefox(options=F_options,
+            self.drive = webdriver.Firefox(
             firefox_profile=profile,        
             seleniumwire_options=options,
             desired_capabilities=desired, executable_path=gecko_path) 
