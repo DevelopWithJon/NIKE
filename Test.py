@@ -8,7 +8,7 @@ display.start()
 
 
 path = os.path.dirname(os.path.abspath(__file__))
-gecko_path = str(path) + "geckodriver.exe"
+gecko_path = str(path) + "/geckodriver.exe"
   
 # now Firefox will run in a virtual display.
 browser = webdriver.Firefox(executable_path=gecko_path)
