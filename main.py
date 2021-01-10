@@ -201,187 +201,186 @@ class  SNKRS():
     
     
     def request_site(self, proxy ):
+
         
+        self.driver = self.get_fox(proxy)
+
+
+        self.driver.get("https://www.nike.com/register")
+
+
+        sleep(5)
+        Fname = names.get_first_name()
+
+        Lname = names.get_last_name()
+
+
+        BDay = str(random.randrange(1,12)).zfill(2) + str(random.randrange(1,28)).zfill(2) + str(random.randrange(1970,2002))
+
+        Email = Fname + '_' + Lname + str(random.randrange(000,999)) + '@drenchkicksultra.com'
+
+        order = self.order_sms()
+        SMS_ID = order[0]
+        Phone_number = order[1]
+        Phone_number = Phone_number[2:]
+        print(SMS_ID)
+        print(Phone_number)
+
+        print(Email)
+
+        #Email
+        self.driver.find_element_by_name('emailAddress').send_keys(Email)
+        #Password
+        self.driver.find_element_by_name('password').send_keys('Indestruktable1')
+        #First Name
+        self.driver.find_element_by_name('firstName').send_keys(Fname)
+        #Last Name
+        self.driver.find_element_by_name('lastName').send_keys(Lname)
+
+
+        #DOB
+        DOB = self.driver.find_element_by_name('dateOfBirth')
+
+
+        self.driver.find_element_by_name('dateOfBirth').click()
+
+        action = ActionChains(self.driver)
+
+        action.send_keys_to_element(DOB, BDay + Keys.ENTER).perform()
+
+        #Male Button find element id from page source code 
+        html = self.driver.page_source  
+        soup1= BeautifulSoup(html)
+        form = soup1.select("div.nike-unite-gender-buttons.gender.nike-unite-component")
+
+        form = form[0]
+        gender_raw = form.find_all("li")
+        gender_raw = gender_raw[0]
+        gender_id = str(gender_raw["id"])
+        Male = self.driver.find_element_by_xpath('//*[@id="{}"]/input'.format(gender_id))
+        Male.send_keys(Keys.ENTER)
+
+
+        #submit form
+
         try:
-        
-            self.driver = self.get_fox(proxy)
-            
-    
-            self.driver.get("https://www.nike.com/register")
-            
-            
+            Join_Us_btn = self.driver.find_element_by_class_name('submitting')
+            Join_Us_btn.click()
+        except:
+            print('no need to submit----------------------')
+            pass
+
+        sleep(8)
+
+        self.driver.get("https://www.nike.com/member/settings")
+
+        sleep(8)
+
+        activated = self.activate_sms(SMS_ID)
+
+        if activated == "ACCESS_READY":
+            print(activated)
+
+        sleep(2)
+
+        #option sub window
+        try:
+            add_phone = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[4]/div/div/div/div[2]/button')
+            add_phone.send_keys(Keys.ENTER)
+        except:
+            print('error')
             sleep(5)
-            Fname = names.get_first_name()
-            
-            Lname = names.get_last_name()
-              
-        
-            BDay = str(random.randrange(1,12)).zfill(2) + str(random.randrange(1,28)).zfill(2) + str(random.randrange(1970,2002))
-            
-            Email = Fname + '_' + Lname + str(random.randrange(000,999)) + '@drenchkicksultra.com'
-            
-            order = self.order_sms()
-            SMS_ID = order[0]
-            Phone_number = order[1]
-            Phone_number = Phone_number[2:]
-            print(SMS_ID)
-            print(Phone_number)
-            
-            print(Email)
-            
-            #Email
-            self.driver.find_element_by_name('emailAddress').send_keys(Email)
-            #Password
-            self.driver.find_element_by_name('password').send_keys('Indestruktable1')
-            #First Name
-            self.driver.find_element_by_name('firstName').send_keys(Fname)
-            #Last Name
-            self.driver.find_element_by_name('lastName').send_keys(Lname)
-            
-            
-            #DOB
-            DOB = self.driver.find_element_by_name('dateOfBirth')
-            
-    
-            self.driver.find_element_by_name('dateOfBirth').click()
-            
-            action = ActionChains(self.driver)
-            
-            action.send_keys_to_element(DOB, BDay + Keys.ENTER).perform()
-            
-            #Male Button find element id from page source code 
-            html = self.driver.page_source  
-            soup1= BeautifulSoup(html)
-            form = soup1.select("div.nike-unite-gender-buttons.gender.nike-unite-component")
-    
-            form = form[0]
-            gender_raw = form.find_all("li")
-            gender_raw = gender_raw[0]
-            gender_id = str(gender_raw["id"])
-            Male = self.driver.find_element_by_xpath('//*[@id="{}"]/input'.format(gender_id))
-            Male.send_keys(Keys.ENTER)
-    
-    
-            #submit form
-    
-            try:
-                Join_Us_btn = self.driver.find_element_by_class_name('submitting')
-                Join_Us_btn.click()
-            except:
-                print('no need to submit----------------------')
-                pass
-            
-            sleep(8)
-            
-            self.driver.get("https://www.nike.com/member/settings")
-            
-            sleep(8)
-            
-            activated = self.activate_sms(SMS_ID)
-            
-            if activated == "ACCESS_READY":
-                print(activated)
-                
-            sleep(2)
-            
-            #option sub window
-            try:
-                add_phone = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[4]/div/div/div/div[2]/button')
-                add_phone.send_keys(Keys.ENTER)
-            except:
-                print('error')
-                sleep(5)
-                add_phone = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[4]/div/div/div/div[2]/button')
-                add_phone.send_keys(Keys.ENTER)
-            
-            sleep(1.5)
-            
-            country_select = self.driver.find_element_by_class_name('country')
-            country_select.send_keys('ff')
-            
-            html = self.driver.page_source  
-            soup3 = BeautifulSoup(html, 'lxml')
-            sleep(5)
-            phone_raw = soup3.find('div', class_ = 'mobileNumber-div')
-            phone_refined = phone_raw.find('input')
-            phone_refined_id = str(phone_refined['id'])
-            
-            
-            phone_field = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(phone_refined_id))
-            phone_field.send_keys(Phone_number)
-            
-            
+            add_phone = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[4]/div/div/div/div[2]/button')
+            add_phone.send_keys(Keys.ENTER)
+
+        sleep(1.5)
+
+        country_select = self.driver.find_element_by_class_name('country')
+        country_select.send_keys('ff')
+
+        html = self.driver.page_source  
+        soup3 = BeautifulSoup(html, 'lxml')
+        sleep(5)
+        phone_raw = soup3.find('div', class_ = 'mobileNumber-div')
+        phone_refined = phone_raw.find('input')
+        phone_refined_id = str(phone_refined['id'])
+
+
+        phone_field = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(phone_refined_id))
+        phone_field.send_keys(Phone_number)
+
+
+        send_code = self.driver.find_element_by_class_name("sendCodeButton") 
+        send_code.send_keys(Keys.ENTER)
+
+        sleep(5)
+        sms_code = self.get_sms_code(SMS_ID)
+
+        if sms_code == None:
             send_code = self.driver.find_element_by_class_name("sendCodeButton") 
             send_code.send_keys(Keys.ENTER)
-            
-            sleep(5)
             sms_code = self.get_sms_code(SMS_ID)
-            
-            if sms_code == None:
-                send_code = self.driver.find_element_by_class_name("sendCodeButton") 
-                send_code.send_keys(Keys.ENTER)
-                sms_code = self.get_sms_code(SMS_ID)
-            else:
-                pass
-            
-            html = self.driver.page_source
-            soup4 = BeautifulSoup(html, 'lxml')
-            
-            enter_raw = soup4.find_all("input")
-            enter_raw = enter_raw[2]
-            enter = enter_raw['id']
-            
-            enter_code = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(enter))
-            enter_code.send_keys(sms_code)
-            
-            check = self.driver.find_element_by_class_name('checkbox') 
-            check.click()
-            
-            html = self.driver.page_source
-            soup5 = BeautifulSoup(html, 'lxml')
-            
-            submit_raw = soup5.find_all("input")
-            submit_id = submit_raw[4]
-            submit_id = submit_id['id']
-            
-            submit = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(submit_id))
-            submit.click()
-            
-            sleep(5)
-            
-            try:
-                state = self.driver.find_element_by_xpath('//*[@id="state"]')
-                state.send_keys('new jersey')
-            except:
-                sleep(3)
-                state = self.driver.find_element_by_xpath('//*[@id="state"]')
-                state.send_keys('new jersey')
-            
-            city = self.driver.find_element_by_xpath('//*[@id="city"]')
-            city.send_keys("Charleston")
-            
-            zip_code = self.driver.find_element_by_xpath('//*[@id="code"]')
-            zip_code.send_keys('29401')
-            
-            save_btn = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[7]/div[2]/div[2]/button')
-            save_btn.click()
-        
-        
-        
-            print(Email)
-        
-            sleep(5)
-            self.driver.quit()
-        
-            return Email
+        else:
+            pass
+
+        html = self.driver.page_source
+        soup4 = BeautifulSoup(html, 'lxml')
+
+        enter_raw = soup4.find_all("input")
+        enter_raw = enter_raw[2]
+        enter = enter_raw['id']
+
+        enter_code = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(enter))
+        enter_code.send_keys(sms_code)
+
+        check = self.driver.find_element_by_class_name('checkbox') 
+        check.click()
+
+        html = self.driver.page_source
+        soup5 = BeautifulSoup(html, 'lxml')
+
+        submit_raw = soup5.find_all("input")
+        submit_id = submit_raw[4]
+        submit_id = submit_id['id']
+
+        submit = self.driver.find_element_by_xpath('//*[@id="{}"]'.format(submit_id))
+        submit.click()
+
+        sleep(5)
+
+        try:
+            state = self.driver.find_element_by_xpath('//*[@id="state"]')
+            state.send_keys('new jersey')
+        except:
+            sleep(3)
+            state = self.driver.find_element_by_xpath('//*[@id="state"]')
+            state.send_keys('new jersey')
+
+        city = self.driver.find_element_by_xpath('//*[@id="city"]')
+        city.send_keys("Charleston")
+
+        zip_code = self.driver.find_element_by_xpath('//*[@id="code"]')
+        zip_code.send_keys('29401')
+
+        save_btn = self.driver.find_element_by_xpath('//*[@id="mobile-container"]/div/div/form/div[2]/div[7]/div[2]/div[2]/button')
+        save_btn.click()
+
+
+
+        print(Email)
+
+        sleep(5)
+        self.driver.quit()
+
+        return Email
             
             # Lets use this to loop through all the previous activty equal the amount of emails we load in our data file
-        except:
+        '''except:
             print('failed to capture')
             print(sys.exc_info()[0])
             sleep(5)
     
-            self.driver.quit()
+            self.driver.quit()'''
             
         
     def looper(self, proxy):
