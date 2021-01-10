@@ -1,3 +1,4 @@
+import os
 from time import sleep, perf_counter
 from pyvirtualdisplay import Display 
 import concurrent.futures
