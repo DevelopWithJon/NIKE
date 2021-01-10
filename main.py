@@ -140,7 +140,8 @@ class  SNKRS():
         profile.set_preference('useAutomationExtension', False)
         profile.update_preferences()
         desired = DesiredCapabilities.FIREFOX
-        gecko_path = "C:/Users/joeyb/OneDrive/Desktop/Python-9-15/geckodriver.exe"
+        path = os.path.dirname(os.path.abspath(__file__))
+        gecko_path = str(path) + "\geckodriver.exe"
         if use_proxies == 'Y':
             self.drive = webdriver.Firefox(
             firefox_profile=profile,        
