@@ -1,10 +1,12 @@
 import os
 from time import sleep, perf_counter
 from pyvirtualdisplay import Display 
+
 import concurrent.futures
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.action_chains import ActionChains 
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 from seleniumwire import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -136,6 +138,8 @@ class  SNKRS():
         options = self.get_proxy(proxy)
         F_options = Options()
         F_options.headless = True
+        binary = FirefoxBinary
+        binary = "/home/ubuntu/Firefox"
         profile = webdriver.FirefoxProfile()
         profile.set_preference("dom.webdriver.enabled", False)
         profile.set_preference('useAutomationExtension', False)
@@ -144,7 +148,7 @@ class  SNKRS():
         path = os.path.dirname(os.path.abspath(__file__))
         gecko_path = str(path) + "/geckodriver.exe"
         if use_proxies == 'Y':
-            self.drive = webdriver.Firefox(
+            self.drive = webdriver.Firefox(firefox_binary=binary,
             firefox_profile=profile,        
             seleniumwire_options=options,
             desired_capabilities=desired, executable_path=gecko_path) 
