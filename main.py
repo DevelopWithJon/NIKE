@@ -1,6 +1,5 @@
 import os
 from time import sleep, perf_counter
-from pyvirtualdisplay import Display 
 
 import concurrent.futures
 from bs4 import BeautifulSoup
@@ -16,9 +15,6 @@ import names
 import requests
 import csv
 import sys
-
-display = Display(visible=0, size=(800, 600))
-display.start()
 
 
 file = open('proxy.txt', 'r')
