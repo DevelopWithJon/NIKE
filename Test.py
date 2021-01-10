@@ -1,5 +1,6 @@
 from pyvirtualdisplay import Display
 from selenium import webdriver
+import os
 
 # Set screen resolution to 1366 x 768 like most 15" laptops
 display = Display(visible=0, size=(1366, 768))
